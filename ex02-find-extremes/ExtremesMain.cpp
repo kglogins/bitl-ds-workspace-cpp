@@ -7,32 +7,66 @@
 using namespace std;
 using namespace ds_course;
 
+Student getMin(Student *ss, int count);
+Student getMax(Student *ss, int count);
+
 int main()
 {
 
-    int studentCount;
-    cin >> studentCount;
+    int studentsCount;
+    cin >> studentsCount;
 
-    // Should we use vectors?
-    std::vector<Student> student;
+    Student students[studentsCount];
     std::string studentInput;
 
     cin.ignore(10000, '\n');
 
     int age;
-    float height;
+    double height;
 
-    for (int i = 0; i < studentCount; i++)
+    for (int i = 0; i < studentsCount; i++)
     {
         cin >> age >> height;
-        printf("Age: %i; Height: %f\n", age, height);
+
+        Student student;
+        student.age = age;
+        student.height = height;
+        students[i] = student;
     }
+
+    Student minStudent = getMin(students, studentsCount);
+    Student maxStudent = getMax(students, studentsCount);
+
+    printf("%i %f\n", minStudent.age, minStudent.height);
+    printf("%i %f\n", maxStudent.age, maxStudent.height);
 }
 
-// Student getMin(Student *ss, int count)
-// {
-// }
+Student getMin(Student *ss, int count)
+{
+    Student minStudent = ss[0];
 
-// Student getMax(Student *ss, int count)
-// {
-// }
+    for (int i = 0; i < count; i++)
+    {
+        if (minStudent.compareTo(ss[i]) == 1)
+        {
+            minStudent = ss[i];
+        }
+    }
+
+    return minStudent;
+}
+
+Student getMax(Student *ss, int count)
+{
+    Student maxStudent = ss[0];
+
+    for (int i = 0; i < count; i++)
+    {
+        if (maxStudent.compareTo(ss[i]) == -1)
+        {
+            maxStudent = ss[i];
+        }
+    }
+
+    return maxStudent;
+}
