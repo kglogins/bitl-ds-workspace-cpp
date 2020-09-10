@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <iomanip>
 #include "Student.h"
 
 using namespace std;
@@ -37,8 +38,8 @@ int main()
     Student minStudent = getMin(students, studentsCount);
     Student maxStudent = getMax(students, studentsCount);
 
-    printf("%i %f\n", minStudent.age, minStudent.height);
-    printf("%i %f\n", maxStudent.age, maxStudent.height);
+    cout << minStudent.age << " " << fixed << setprecision(5) << minStudent.height << endl;
+    cout << maxStudent.age << " " << fixed << setprecision(5) << maxStudent.height << endl;
 }
 
 Student getMin(Student *ss, int count)
