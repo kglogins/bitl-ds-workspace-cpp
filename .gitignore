@@ -33,4 +33,7 @@
 
 *.pdb
 *.ilk
+
+# Custom
 .vscode
+test-dir
