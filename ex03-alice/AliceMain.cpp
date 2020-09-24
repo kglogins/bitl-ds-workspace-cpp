@@ -14,7 +14,6 @@ int main()
 {
 
     std::string inputLine;
-    std::map<int, Node> nodeList;
     std::map<int, std::vector<int>> inputData;
 
     std::vector<int> mainNumberArray;
@@ -62,13 +61,6 @@ int main()
     headNode.printPreorder();
     cout << "0\n";
 
-    /** TODO:
-     * We have found the head node number, we can start building tree
-     * But now I am thinking that when we read we don't need to make nodes
-     * We only store the values in a data structure and after we have found
-     * the head number we start to create tree by looking at the created structure
-     */
-
     return 0;
 }
 
@@ -115,5 +107,6 @@ int findNodeHeadNumber(vector<int> first, vector<int> second)
         }
     }
 
+    cout << "No head found (probably invalid tree)\n";
     return res;
 }
