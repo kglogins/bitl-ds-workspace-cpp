@@ -91,14 +91,12 @@ ds_course::Ratio ds_course::Ratio::operator/(const Ratio &rhs)
 
 bool ds_course::Ratio::operator<(const Ratio &rhs)
 {
-
-    return true;
+    return ((num / den) < (rhs.num / rhs.den));
 }
 
 bool ds_course::Ratio::operator>(const Ratio &rhs)
 {
-
-    return true;
+    return ((num / den) > (rhs.num / rhs.den));
 }
 
 bool ds_course::Ratio::operator==(const ds_course::Ratio &r)

@@ -11,8 +11,9 @@ namespace ds_course
     class Matrix
     {
     private:
-        int rows; // row count
-        int cols; // column count
+        int rows;
+        int cols;
+
     public:
         T **a;
         Matrix(int rr, int cc);
@@ -30,6 +31,20 @@ namespace ds_course
                 for (int j = 0; j < m.getCols(); j++)
                     input >> m.a[i][j];
             return input;
+        }
+
+        friend std::ostream &operator<<(std::ostream &oStream, ds_course::Matrix<T> &m)
+        {
+            for (int i = 0; i < m.getRows(); i++)
+            {
+                for (int j = 0; j < m.getCols(); j++)
+                {
+                    oStream << m.a[i][j] << " ";
+                }
+                oStream << std::endl;
+            }
+
+            return oStream;
         }
     };
 } // namespace ds_course
@@ -51,21 +66,75 @@ int ds_course::Matrix<T>::getCols() { return cols; }
 template <class T>
 ds_course::Matrix<T> ds_course::Matrix<T>::operator+(ds_course::Matrix<T> rhs)
 {
-    if (this == rhs)
+    if (rows != rhs.rows)
     {
-        printf("Test");
+        throw std::out_of_range("Row count differ");
     }
-    return Matrix(2, 2);
+    if (cols != rhs.cols)
+    {
+        throw std::out_of_range("Col count differ");
+    }
+
+    Matrix<T> result(rows, cols);
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            result.a[i][j] = a[i][j] + rhs.a[i][j];
+        }
+    }
+
+    return result;
 }
 
 template <class T>
 ds_course::Matrix<T> ds_course::Matrix<T>::operator-(ds_course::Matrix<T> rhs)
 {
+    if (rows != rhs.rows)
+    {
+        throw std::out_of_range("Row count differ");
+    }
+    if (cols != rhs.cols)
+    {
+        throw std::out_of_range("Col count differ");
+    }
+
+    Matrix<T> result(rows, cols);
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            result.a[i][j] = a[i][j] - rhs.a[i][j];
+        }
+    }
+
+    return result;
 }
 
 template <class T>
 ds_course::Matrix<T> ds_course::Matrix<T>::operator*(ds_course::Matrix<T> rhs)
 {
+    if (cols != rhs.rows)
+    {
+        throw std::out_of_range("Left hand side matrix column count differ from right hand side matrix row count\n");
+    }
+
+    Matrix<T> result(rows, rhs.cols);
+
+    for (int i = 0; i < rows; ++i)
+    {
+        for (int j = 0; j < rhs.cols; ++j)
+        {
+            for (int k = 0; k < cols; ++k)
+            {
+                result.a[i][j] = result.a[i][j] + (a[i][k] * rhs.a[k][j]);
+            }
+        }
+    }
+
+    return result;
 }
 
 template <class T>
@@ -73,11 +142,11 @@ bool ds_course::Matrix<T>::operator==(const ds_course::Matrix<T> &rhs)
 {
     if (rows != rhs.rows)
     {
-        throw std::out_of_range("row counts differ");
+        throw std::out_of_range("Row count differ");
     }
     if (cols != rhs.cols)
     {
-        throw std::out_of_range("col counts differ");
+        throw std::out_of_range("Col count differ");
     }
     for (int i = 0; i < rows; i++)
         for (int j = 0; j < cols; j++)

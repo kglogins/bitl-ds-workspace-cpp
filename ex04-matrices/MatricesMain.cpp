@@ -1,5 +1,4 @@
-#include <iostream>
-#include <sstream>
+#include <iomanip>
 #include "Ratio.h"
 #include "Matrix.h"
 
@@ -7,48 +6,224 @@ using namespace ds_course;
 using namespace std;
 int main()
 {
-    std::string matrixType;
+    std::string leftMatrixType, rightMatrixType, matrixOperation;
     int rows;
     int columns;
 
-    cin >> matrixType >> rows >> columns;
+    cin >> leftMatrixType >> rows >> columns;
 
-    string test;
-
-    cin.ignore(10000, '\n');
-
-    std::string inputLine;
-    while (getline(cin, inputLine))
+    if (leftMatrixType[0] != 'M' || leftMatrixType.size() != 2)
     {
-        istringstream sstr(inputLine);
-        if (sstr.peek() == '#')
+        cout << "Type defined wrong" << std::endl;
+        ;
+        return 0;
+    }
+
+    if (leftMatrixType[1] == 'Z')
+    {
+        Matrix<int> leftMatrix(rows, columns);
+        cin >> leftMatrix;
+
+        cin >> rightMatrixType >> rows >> columns;
+
+        if (leftMatrixType.compare(rightMatrixType) != 0)
         {
-            continue;
+            cout << "The matrice's types differ" << std::endl;
+            return 0;
+        }
+
+        Matrix<int> rightMatrix(rows, columns);
+        cin >> rightMatrix;
+
+        cin >> matrixOperation;
+
+        if (matrixOperation.compare("ADD") == 0)
+        {
+            try
+            {
+                Matrix<int> result = leftMatrix + rightMatrix;
+                cout << leftMatrixType << " " << result.getRows() << " " << result.getCols() << std::endl;
+                cout << result;
+                return 1;
+            }
+            catch (const std::out_of_range &e)
+            {
+                cout << "out_of_range" << std::endl;
+            }
+        }
+        else if (matrixOperation.compare("SUB") == 0)
+        {
+            try
+            {
+                Matrix<int> result = leftMatrix - rightMatrix;
+                cout << leftMatrixType << " " << result.getRows() << " " << result.getCols() << std::endl;
+                cout << result;
+                return 1;
+            }
+            catch (const std::out_of_range &e)
+            {
+                cout << "out_of_range" << std::endl;
+            }
+        }
+        else if (matrixOperation.compare("MUL") == 0)
+        {
+            try
+            {
+                Matrix<int> result = leftMatrix * rightMatrix;
+                cout << leftMatrixType << " " << result.getRows() << " " << result.getCols() << std::endl;
+                cout << result;
+                return 1;
+            }
+            catch (const std::out_of_range &e)
+            {
+                cout << "out_of_range" << std::endl;
+            }
         }
         else
         {
-            if (matrixType == "MZ")
-            {
-                sstr >> test;
-            }
-            else if (matrixType == "MQ")
-            {
-                sstr >> test;
-            }
-            else if (matrixType == "MR")
-            {
-                sstr >> test;
-            }
+            cout << "Wrong matrix operation" << std::endl;
         }
     }
-    std::string type;
+    else if (leftMatrixType[1] == 'Q')
+    {
+        Matrix<Ratio> leftMatrix(rows, columns);
+        cin >> leftMatrix;
 
-    cin >> type >> rows >> columns;
+        cin >> rightMatrixType >> rows >> columns;
+
+        if (leftMatrixType.compare(rightMatrixType) != 0)
+        {
+            cout << "The matrice's types differ" << std::endl;
+            return 0;
+        }
+
+        Matrix<Ratio> rightMatrix(rows, columns);
+        cin >> rightMatrix;
+
+        cin >> matrixOperation;
+
+        if (matrixOperation.compare("ADD") == 0)
+        {
+            try
+            {
+                Matrix<Ratio> result = leftMatrix + rightMatrix;
+                cout << leftMatrixType << " " << result.getRows() << " " << result.getCols() << std::endl;
+                cout << result;
+                return 1;
+            }
+            catch (const std::out_of_range &e)
+            {
+                cout << "out_of_range" << std::endl;
+            }
+        }
+        else if (matrixOperation.compare("SUB") == 0)
+        {
+            try
+            {
+                Matrix<Ratio> result = leftMatrix - rightMatrix;
+                cout << leftMatrixType << " " << result.getRows() << " " << result.getCols() << std::endl;
+                cout << result;
+                return 1;
+            }
+            catch (const std::out_of_range &e)
+            {
+                cout << "out_of_range" << std::endl;
+            }
+        }
+        else if (matrixOperation.compare("MUL") == 0)
+        {
+            try
+            {
+                Matrix<Ratio> result = leftMatrix * rightMatrix;
+                cout << leftMatrixType << " " << result.getRows() << " " << result.getCols() << std::endl;
+                cout << result;
+                return 1;
+            }
+            catch (const std::out_of_range &e)
+            {
+                cout << "out_of_range" << std::endl;
+            }
+        }
+        else
+        {
+            cout << "Wrong matrix operation" << std::endl;
+        }
+    }
+    else if (leftMatrixType[1] == 'R')
+    {
+        Matrix<double> leftMatrix(rows, columns);
+        cin >> leftMatrix;
+
+        cin >> rightMatrixType >> rows >> columns;
+
+        if (leftMatrixType.compare(rightMatrixType) != 0)
+        {
+            cout << "The matrice's types differ" << std::endl;
+            return 0;
+        }
+
+        Matrix<double> rightMatrix(rows, columns);
+        cin >> rightMatrix;
+
+        cin >> matrixOperation;
+
+        if (matrixOperation.compare("ADD") == 0)
+        {
+            try
+            {
+                Matrix<double> result = leftMatrix + rightMatrix;
+                cout << leftMatrixType << " " << result.getRows() << " " << result.getCols() << std::endl;
+                cout << std::fixed << std::setprecision(5) << result;
+                return 1;
+            }
+            catch (const std::out_of_range &e)
+            {
+                cout << "out_of_range" << std::endl;
+            }
+        }
+        else if (matrixOperation.compare("SUB") == 0)
+        {
+            try
+            {
+                Matrix<double> result = leftMatrix - rightMatrix;
+                cout << leftMatrixType << " " << result.getRows() << " " << result.getCols() << std::endl;
+                cout << std::fixed << std::setprecision(5) << result;
+                return 1;
+            }
+            catch (const std::out_of_range &e)
+            {
+                cout << "out_of_range" << std::endl;
+            }
+        }
+        else if (matrixOperation.compare("MUL") == 0)
+        {
+            try
+            {
+                Matrix<double> result = leftMatrix * rightMatrix;
+                cout << leftMatrixType << " " << result.getRows() << " " << result.getCols() << std::endl;
+                cout << std::fixed << std::setprecision(5) << result;
+                return 1;
+            }
+            catch (const std::out_of_range &e)
+            {
+                cout << "out_of_range" << std::endl;
+            }
+        }
+        else
+        {
+            cout << "Wrong matrix operation" << std::endl;
+        }
+    }
+    else
+    {
+        cout << "Such matrix type is not supported\n";
+    }
+
     // rational arithmetic
     // It is not quite right: fractions not simplified
-    Ratio r1(-17, -34);
-    Ratio r2(1, 3);
-    cout << (r1 + r2) << endl;
+    // Ratio r1(-17, -34);
+    // Ratio r2(1, 3);
+    // cout << (r1 + r2) << endl;
 
     // Matrix<Ratio> m1(2, 2);
     // Matrix<Ratio> m2(2, 2);
