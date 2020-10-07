@@ -25,7 +25,7 @@ namespace ds_course
 
         friend std::ostream &operator<<(std::ostream &oStream, const Ratio rat)
         {
-            oStream << "[" << rat.num << "/" << rat.den << "]";
+            oStream << rat.num << "/" << rat.den;
             return oStream;
         }
 
