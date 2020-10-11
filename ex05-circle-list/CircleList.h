@@ -32,4 +32,16 @@ namespace ds_course
         CNode *cursor;
         int size;
     };
+
+    class OutOfBoundsException
+    {
+    public:
+        OutOfBoundsException(const std::string &msg);
+        ~OutOfBoundsException();
+
+        std::string getMessage() const;
+
+    private:
+        std::string msg;
+    };
 } // namespace ds_course

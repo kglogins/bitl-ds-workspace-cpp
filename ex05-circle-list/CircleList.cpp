@@ -91,3 +91,17 @@ std::string ds_course::CircleList::to_str() const
 
     return result;
 }
+
+ds_course::OutOfBoundsException::OutOfBoundsException(const std::string &msg)
+{
+    this->msg = msg;
+}
+
+ds_course::OutOfBoundsException::~OutOfBoundsException()
+{
+}
+
+std::string ds_course::OutOfBoundsException::getMessage() const
+{
+    return this->msg;
+}
