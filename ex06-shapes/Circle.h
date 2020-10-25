@@ -9,7 +9,7 @@ namespace ds_course
     private:
         const int n = 1000;
         std::string color;
-        ds_course::Matrix<double> **points;
+        ds_course::Matrix<double> *points;
 
     public:
         Circle(std::string col);

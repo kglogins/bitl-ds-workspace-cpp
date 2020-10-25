@@ -17,5 +17,5 @@ namespace ds_course
         ds_course::Shape *top();
         void push(Shape *sh);
         void pop();
-    }
+    };
 } // namespace ds_course
