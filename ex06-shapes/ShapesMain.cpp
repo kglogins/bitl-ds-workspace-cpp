@@ -32,6 +32,11 @@ int main()
         }
         else if (cmd.compare("POLYGON") == 0)
         {
+            std::string color;
+            int edges;
+            sstr >> color >> edges;
+
+            stack.push(new ds_course::Polygon(color, edges));
         }
         else if (cmd.compare("TRANSF") == 0)
         {
@@ -62,16 +67,29 @@ int main()
             else if (transfCmd.compare("SHE") == 0)
             {
                 double cx, cy;
-                sstr >> cx, cy;
+                sstr >> cx >> cy;
                 ds_course::Matrix<double> vv = ds_course::getSHE(cx, cy);
                 stack.top()->transform(vv);
             }
         }
         else if (cmd.compare("COPY") == 0)
         {
+            stack.push(stack.top()->clone());
         }
         else if (cmd.compare("GROUP") == 0)
         {
+            int items;
+            sstr >> items;
+
+            ds_course::ShapeStack groupStack;
+
+            for (int i = 0; i < items; i++)
+            {
+                groupStack.push(stack.top());
+                stack.pop();
+            }
+
+            stack.push(new ds_course::Group(groupStack));
         }
         else if (cmd.compare("SHOW") == 0)
         {

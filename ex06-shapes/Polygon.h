@@ -12,7 +12,7 @@ namespace ds_course
     private:
         int n;
         std::string color;
-        ds_course::Matrix<double> **points;
+        ds_course::Matrix<double> *points;
 
     public:
         Polygon(std::string color, int n);

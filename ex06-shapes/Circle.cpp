@@ -2,9 +2,9 @@
 #include <cmath>
 #include "Circle.h"
 
-ds_course::Circle::Circle(std::string col)
+ds_course::Circle::Circle(std::string color)
 {
-    this->color = col;
+    this->color = color;
 
     this->points = (Matrix<double> *)malloc(sizeof(Matrix<double>) * n);
     double rad = ((float)360 / (float)n) * (M_PI / (float)180);
@@ -54,4 +54,5 @@ void ds_course::Circle::transform(ds_course::Matrix<double> m)
 
 ds_course::Shape *ds_course::Circle::clone()
 {
+    return new ds_course::Circle(*this);
 }
