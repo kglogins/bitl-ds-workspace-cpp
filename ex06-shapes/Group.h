@@ -1,3 +1,6 @@
+#ifndef DS_GROUP_H
+#define DS_GROUP_H
+
 #include <string>
 #include "Matrix.h"
 #include "Shape.h"
@@ -18,3 +21,5 @@ namespace ds_course
         Shape *clone();
     };
 } // namespace ds_course
+
+#endif

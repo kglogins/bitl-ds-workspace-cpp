@@ -48,6 +48,10 @@ void ds_course::Circle::transform(ds_course::Matrix<double> m)
 {
     for (int i = 0; i < n; i++)
     {
-        points[i] = points[i] * m;
+        points[i] = m * points[i];
     }
+}
+
+ds_course::Shape *ds_course::Circle::clone()
+{
 }

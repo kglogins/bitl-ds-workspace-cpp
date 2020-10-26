@@ -1,6 +1,9 @@
+#ifndef DS_CIRCLE_H
+#define DS_CIRCLE_H
+
 #include <string>
-#include "Shape.h"
 #include "Matrix.h"
+#include "Shape.h"
 
 namespace ds_course
 {
@@ -19,3 +22,5 @@ namespace ds_course
         ds_course::Shape *clone();
     };
 } // namespace ds_course
+
+#endif

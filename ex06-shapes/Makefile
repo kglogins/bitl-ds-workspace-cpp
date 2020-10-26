@@ -1,4 +1,4 @@
-OUTPUTFILE := shapes.exe
+OUTPUTFILE := ShapesMain.exe
 SRC_DIR := .
 OBJ_DIR := .
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
@@ -9,10 +9,10 @@ CXXFLAGS :=
 
 # Default target
 all: $(OBJ_FILES)
-	g++ $(LDFLAGS) -o $(OUTPUTFILE) $^
+	g++ -g $(LDFLAGS) -o $(OUTPUTFILE) $^
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	g++ $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+	g++ -g $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 # Delete palindromes
 clean:

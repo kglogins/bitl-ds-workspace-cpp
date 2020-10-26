@@ -1,9 +1,13 @@
+#ifndef DS_POLYGON_H
+#define DS_POLYGON_H
+
 #include <string>
+#include "Matrix.h"
 #include "Shape.h"
 
 namespace ds_course
 {
-    class Polygon : public ds_course::Shape
+    class Polygon : public Shape
     {
     private:
         int n;
@@ -18,3 +22,5 @@ namespace ds_course
         ds_course::Shape *clone();
     };
 } // namespace ds_course
+
+#endif
