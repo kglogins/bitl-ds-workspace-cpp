@@ -1,5 +1,6 @@
 #include <string>
 #include <cmath>
+#include <cstring>
 #include "Circle.h"
 
 ds_course::Circle::Circle(std::string color)
@@ -54,5 +55,8 @@ void ds_course::Circle::transform(ds_course::Matrix<double> m)
 
 ds_course::Shape *ds_course::Circle::clone()
 {
-    return new ds_course::Circle(*this);
+    ds_course::Circle *cloneShape = new ds_course::Circle(this->color);
+    memcpy(cloneShape->points, this->points, sizeof(ds_course::Matrix<double>) * this->n);
+
+    return cloneShape;
 }

@@ -97,11 +97,14 @@ int main()
 
             printf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             printf("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"%i\" height=\"%i\">\n", width, height);
+            printf("<path d=\"M 0 0 L %i 0 L %i %i L 0 %i\" fill=\"#cccccc \"/>", width, width, height, height);
 
-            do
+            stack.iterReset();
+
+            while (stack.iterHasNext())
             {
                 std::cout << stack.iterNext()->draw();
-            } while (stack.iterHasNext());
+            }
 
             printf("<rect x=\"0\" y=\"0\" width=\"%i\" height=\"%i\" stroke=\"#999999\" fill=\"none\" stroke-width=\"1\"/>\n</svg>\n", width, height);
 

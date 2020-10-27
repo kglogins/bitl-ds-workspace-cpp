@@ -40,7 +40,7 @@ void ds_course::ShapeStack::pop()
 
 void ds_course::ShapeStack::iterReset()
 {
-    iterCursor = size() - 1;
+    iterCursor = size();
 }
 
 bool ds_course::ShapeStack::iterHasNext()
@@ -50,5 +50,5 @@ bool ds_course::ShapeStack::iterHasNext()
 
 ds_course::Shape *ds_course::ShapeStack::iterNext()
 {
-    return shapes[iterCursor--];
+    return shapes[--iterCursor];
 }

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200'>
+<path d='M 0 0 L 300 0 L 300 200 L 0 200' fill='#cccccc'/>
+<path d="M 299.999993 100.003533 L 0.000007 100.003533 L 0.000007 -0.003533 L 299.999993 -0.003533" fill="#FFFFFF"/>
+<path d="M 299.999993 200.003533 L 0.000007 200.003533 L 0.000007 99.996467 L 299.999993 99.996467" fill="#D7141A"/>
+<path d="M 150.000000 100.000000 L 0.000000 200.000040 L -0.000000 -0.000040" fill="#11457E"/>
+<rect x='0' y='0' width='300' height='200' stroke='#999999' fill='none' stroke-width='1'/>
+</svg>

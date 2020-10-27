@@ -1,3 +1,4 @@
+#include <cstring>
 #include "Group.h"
 #include "Shape.h"
 #include "Matrix.h"
@@ -13,6 +14,7 @@ ds_course::Group::~Group()
 
 std::string ds_course::Group::draw()
 {
+    this->stack.iterReset();
     std::string result;
 
     while (this->stack.iterHasNext())
@@ -20,27 +22,22 @@ std::string ds_course::Group::draw()
         result = result + this->stack.iterNext()->draw();
     };
 
-    result = result + this->stack.iterNext()->draw();
-
-    this->stack.iterReset();
-
     return result;
 }
 
 void ds_course::Group::transform(ds_course::Matrix<double> m)
 {
+    stack.iterReset();
 
-    while (this->stack.iterHasNext())
+    while (stack.iterHasNext())
     {
-        this->stack.iterNext()->transform(m);
-    };
-
-    this->stack.iterNext()->transform(m);
-
-    this->stack.iterReset();
+        stack.iterNext()->transform(m);
+    }
 }
 
 ds_course::Shape *ds_course::Group::clone()
 {
-    return new ds_course::Group(*this);
+    ds_course::Group *cloneShape = new ds_course::Group(this->stack);
+
+    return cloneShape;
 }

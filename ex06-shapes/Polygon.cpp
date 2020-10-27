@@ -1,4 +1,5 @@
 #include <cmath>
+#include <cstring>
 #include "Polygon.h"
 #include "Matrix.h"
 
@@ -55,5 +56,8 @@ void ds_course::Polygon::transform(ds_course::Matrix<double> m)
 
 ds_course::Shape *ds_course::Polygon::clone()
 {
-    return new ds_course::Polygon(*this);
+    ds_course::Polygon *cloneShape = new ds_course::Polygon(this->color, this->n);
+    memcpy(cloneShape->points, this->points, sizeof(ds_course::Matrix<double>) * this->n);
+
+    return cloneShape;
 }
