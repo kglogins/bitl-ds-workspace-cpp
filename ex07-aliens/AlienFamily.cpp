@@ -21,11 +21,13 @@ void ds_course::AlienFamily::addChild(int parentVal, int childVal, std::string s
         return;
     }
 
-    ds_course::AlienFamily *currentFamily = this;
     struct ds_course::Alien *parentNodeSaved = NULL;
     struct ds_course::Alien *childNodeSaved = NULL;
     struct ds_course::Alien *parentNode = NULL;
     struct ds_course::Alien *childNode = NULL;
+
+    ds_course::AlienFamily *currentFamily = this;
+    ds_course::AlienFamily *currentFamilySaved = NULL;
 
     while (currentFamily != NULL)
     {
@@ -35,6 +37,7 @@ void ds_course::AlienFamily::addChild(int parentVal, int childVal, std::string s
         if (parentNode != NULL)
         {
             parentNodeSaved = parentNode;
+            currentFamilySaved = currentFamily;
         }
 
         if (childNode != NULL)
@@ -68,7 +71,7 @@ void ds_course::AlienFamily::addChild(int parentVal, int childVal, std::string s
         else
         {
             parentNodeSaved->left = child;
-            this->numberOfAliens++;
+            currentFamilySaved->numberOfAliens++;
             return;
         }
     }
@@ -81,7 +84,7 @@ void ds_course::AlienFamily::addChild(int parentVal, int childVal, std::string s
         else
         {
             parentNodeSaved->right = child;
-            this->numberOfAliens++;
+            currentFamilySaved->numberOfAliens++;
             return;
         }
     }
@@ -140,7 +143,7 @@ void ds_course::AlienFamily::lookupAlien(int value)
     this->traversalPosition = 0;
     this->fillInorderArray(currentFamily->headNode, inorderArray);
 
-    for (int alienIndex = 0; alienIndex < this->traversalPosition; alienIndex++)
+    for (int alienIndex = 0; alienIndex < currentFamily->numberOfAliens; alienIndex++)
     {
         if (inorderArray[alienIndex] == value)
         {
@@ -153,7 +156,7 @@ void ds_course::AlienFamily::lookupAlien(int value)
                 printf("0 ");
             }
 
-            if (alienIndex != this->traversalPosition - 1)
+            if (alienIndex != currentFamily->numberOfAliens - 1)
             {
                 printf("%i\n", inorderArray[alienIndex + 1]);
             }
