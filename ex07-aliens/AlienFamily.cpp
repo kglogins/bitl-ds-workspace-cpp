@@ -1,0 +1,153 @@
+#include <cstdlib>
+
+#include "AlienFamily.h"
+
+ds_course::AlienFamily::AlienFamily(struct ds_course::Alien *headNode)
+{
+    this->headNode = headNode;
+    this->next = NULL;
+};
+
+ds_course::AlienFamily::~AlienFamily()
+{
+}
+
+void ds_course::AlienFamily::addChild(int parentVal, int childVal, std::string side)
+{
+    if (parentVal == childVal)
+    {
+        printf("error1\n");
+        return;
+    }
+
+    ds_course::AlienFamily *currentFamily = this;
+    struct ds_course::Alien *parentNodeSaved = NULL;
+    struct ds_course::Alien *childNodeSaved = NULL;
+    struct ds_course::Alien *parentNode = NULL;
+    struct ds_course::Alien *childNode = NULL;
+
+    while (currentFamily != NULL)
+    {
+        parentNode = currentFamily->findAlienByValue(currentFamily->headNode, parentVal);
+        childNode = currentFamily->findAlienByValue(currentFamily->headNode, childVal);
+
+        if (parentNode != NULL)
+        {
+            parentNodeSaved = parentNode;
+        }
+
+        if (childNode != NULL)
+        {
+            childNodeSaved = childNode;
+        }
+
+        currentFamily = currentFamily->next;
+    }
+
+    if (parentNodeSaved == NULL)
+    {
+        printf("error2\n");
+        return;
+    }
+
+    if (childNodeSaved != NULL)
+    {
+        printf("error3\n");
+        return;
+    }
+
+    struct ds_course::Alien *child = new ds_course::Alien(childVal);
+
+    if (side.compare("L") == 0) // left
+    {
+        if (parentNode->left != NULL)
+        {
+            printf("error4\n");
+        }
+        else
+        {
+            parentNode->left = child;
+        }
+    }
+    else if (side.compare("R") == 0) // right
+    {
+        if (parentNode->right != NULL)
+        {
+            printf("error5\n");
+        }
+        else
+        {
+            parentNode->right = child;
+        }
+    }
+}
+
+ds_course::Alien *ds_course::AlienFamily::findAlienByValue(struct ds_course::Alien *alien, int value)
+{
+    if (alien == NULL)
+    {
+        return NULL;
+    }
+
+    if (alien->value == value)
+    {
+        return alien;
+    }
+
+    struct ds_course::Alien *leftResult = findAlienByValue(alien->left, value);
+    struct ds_course::Alien *rightResult = findAlienByValue(alien->right, value);
+
+    if (leftResult != NULL)
+    {
+        return leftResult;
+    }
+    else if (rightResult != NULL)
+    {
+        return rightResult;
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
+ds_course::Alien *ds_course::AlienFamily::getHeadNode()
+{
+    return this->headNode;
+}
+
+void ds_course::AlienFamily::lookupAlien(int value)
+{
+    ds_course::AlienFamily *currentFamily = this;
+
+    while (currentFamily->findAlienByValue(currentFamily->headNode, value) == NULL)
+    {
+        currentFamily = currentFamily->next;
+        if (currentFamily == NULL)
+            break;
+    }
+
+    currentFamily;
+}
+
+void ds_course::AlienFamily::addNewFamily(int headVal)
+{
+    ds_course::AlienFamily *currentFamily = this;
+
+    while (currentFamily->findAlienByValue(currentFamily->headNode, headVal) == NULL)
+    {
+        if (currentFamily->next == NULL)
+        {
+            struct ds_course::Alien *newHeadNode = new ds_course::Alien(headVal);
+            struct ds_course::AlienFamily *newFamily = new ds_course::AlienFamily(newHeadNode);
+            currentFamily->next = newFamily;
+
+            return;
+        }
+
+        currentFamily = currentFamily->next;
+    }
+
+    printf("error6\n");
+    return;
+}
