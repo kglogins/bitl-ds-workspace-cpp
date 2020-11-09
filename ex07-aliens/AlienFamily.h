@@ -20,6 +20,8 @@ namespace ds_course
     private:
         struct Alien *headNode;
         struct AlienFamily *next;
+        int numberOfAliens;
+        int traversalPosition = 0;
 
     public:
         AlienFamily(struct ds_course::Alien *headNode);
@@ -29,6 +31,7 @@ namespace ds_course
         struct Alien *getHeadNode();
         void lookupAlien(int value);
         void addNewFamily(int headVal);
+        void fillInorderArray(struct ds_course::Alien *headNode, int *inorderArray);
     };
 
 } // namespace ds_course

@@ -6,6 +6,7 @@ ds_course::AlienFamily::AlienFamily(struct ds_course::Alien *headNode)
 {
     this->headNode = headNode;
     this->next = NULL;
+    this->numberOfAliens = 1;
 };
 
 ds_course::AlienFamily::~AlienFamily()
@@ -60,24 +61,28 @@ void ds_course::AlienFamily::addChild(int parentVal, int childVal, std::string s
 
     if (side.compare("L") == 0) // left
     {
-        if (parentNode->left != NULL)
+        if (parentNodeSaved->left != NULL)
         {
             printf("error4\n");
         }
         else
         {
-            parentNode->left = child;
+            parentNodeSaved->left = child;
+            this->numberOfAliens++;
+            return;
         }
     }
     else if (side.compare("R") == 0) // right
     {
-        if (parentNode->right != NULL)
+        if (parentNodeSaved->right != NULL)
         {
             printf("error5\n");
         }
         else
         {
-            parentNode->right = child;
+            parentNodeSaved->right = child;
+            this->numberOfAliens++;
+            return;
         }
     }
 }
@@ -119,15 +124,60 @@ ds_course::Alien *ds_course::AlienFamily::getHeadNode()
 void ds_course::AlienFamily::lookupAlien(int value)
 {
     ds_course::AlienFamily *currentFamily = this;
+    struct ds_course::Alien *foundAlien = NULL;
 
-    while (currentFamily->findAlienByValue(currentFamily->headNode, value) == NULL)
+    while ((foundAlien = currentFamily->findAlienByValue(currentFamily->headNode, value)) == NULL)
     {
         currentFamily = currentFamily->next;
         if (currentFamily == NULL)
-            break;
+        {
+            printf("error0\n");
+            return;
+        }
     }
 
-    currentFamily;
+    int inorderArray[currentFamily->numberOfAliens];
+    this->traversalPosition = 0;
+    this->fillInorderArray(currentFamily->headNode, inorderArray);
+
+    for (int alienIndex = 0; alienIndex < this->traversalPosition; alienIndex++)
+    {
+        if (inorderArray[alienIndex] == value)
+        {
+            if (alienIndex != 0)
+            {
+                printf("%i ", inorderArray[alienIndex - 1]);
+            }
+            else
+            {
+                printf("0 ");
+            }
+
+            if (alienIndex != this->traversalPosition - 1)
+            {
+                printf("%i\n", inorderArray[alienIndex + 1]);
+            }
+            else
+            {
+                printf("0\n");
+            }
+        }
+    }
+}
+
+void ds_course::AlienFamily::fillInorderArray(struct ds_course::Alien *node, int *inorderArray)
+{
+    if (node == NULL)
+    {
+        return;
+    }
+
+    fillInorderArray(node->left, inorderArray);
+
+    inorderArray[traversalPosition] = node->value;
+    traversalPosition++;
+
+    fillInorderArray(node->right, inorderArray);
 }
 
 void ds_course::AlienFamily::addNewFamily(int headVal)
