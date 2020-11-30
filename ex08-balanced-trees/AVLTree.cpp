@@ -293,6 +293,21 @@ void ds_course::AVLTree::dump(ds_course::Node *node, std::string start, std::str
         return;
     }
 
+    std::string startWordTemp = start;
+    std::string endWordTemp = end;
+    std::string nodeWordTemp = node->word;
+
+    if (this->mode == 1)
+    {
+        // TODO: Short lex
+    }
+    else if (this->mode == 2)
+    {
+        startWordTemp = reverse_string(start);
+        endWordTemp = reverse_string(end);
+        nodeWordTemp = reverse_string(node->word);
+    }
+
     dump(node->left, start, end);
 
     if (start.compare("_") == 0 && end.compare("_") == 0)
@@ -301,9 +316,24 @@ void ds_course::AVLTree::dump(ds_course::Node *node, std::string start, std::str
     }
     else if (start.compare("_") == 0)
     {
+        if (startWordTemp < nodeWordTemp)
+        {
+            std::cout << " (" << node->word << "," << node->badnessValue << ")";
+        }
     }
     else if (end.compare("_") == 0)
     {
+        if (endWordTemp > nodeWordTemp)
+        {
+            std::cout << " (" << node->word << "," << node->badnessValue << ")";
+        }
+    }
+    else
+    {
+        if (startWordTemp < nodeWordTemp && endWordTemp > nodeWordTemp)
+        {
+            std::cout << " (" << node->word << "," << node->badnessValue << ")";
+        }
     }
 
     dump(node->right, start, end);
