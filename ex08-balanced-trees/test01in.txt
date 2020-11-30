@@ -1,0 +1,13 @@
+COLEX
+I abate abatija abats abats abi abinieki abonements
+G abats
+G abi
+E abinieki abpus abra
+G abinieki
+L abi
+L abats
+L abi
+D _ _
+D ATE zzzzzats
+D zz aa
+F
