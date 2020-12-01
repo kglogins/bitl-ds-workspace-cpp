@@ -80,6 +80,78 @@ ds_course::Node *ds_course::AVLTree::insert(ds_course::Node *node, std::string w
     }
     else if (this->mode == 1) // Shortlex order
     {
+        if (word.length() < node->word.length())
+        {
+            node->left = insert(node->left, word);
+
+            if (get_height(node->left) - get_height(node->right) == 2)
+            {
+                if (word < node->left->word)
+                {
+                    node = single_right_rotate(node);
+                }
+                else
+                {
+                    node = double_right_rotate(node);
+                }
+            }
+        }
+        else if (word.length() > node->word.length())
+        {
+            node->right = insert(node->right, word);
+
+            if (get_height(node->right) - get_height(node->left) == 2)
+            {
+                if (word > node->right->word)
+                {
+                    node = single_left_rotate(node);
+                }
+                else
+                {
+                    node = double_left_rotate(node);
+                }
+            }
+        }
+        else if (word.length() == node->word.length())
+        {
+            if (word < node->word)
+            {
+                node->left = insert(node->left, word);
+
+                if (get_height(node->left) - get_height(node->right) == 2)
+                {
+                    if (word < node->left->word)
+                    {
+                        node = single_right_rotate(node);
+                    }
+                    else
+                    {
+                        node = double_right_rotate(node);
+                    }
+                }
+            }
+            else if (word.compare(node->word) == 0)
+            {
+                node->badnessValue++;
+                return node;
+            }
+            else if (word > node->word)
+            {
+                node->right = insert(node->right, word);
+
+                if (get_height(node->right) - get_height(node->left) == 2)
+                {
+                    if (word > node->right->word)
+                    {
+                        node = single_left_rotate(node);
+                    }
+                    else
+                    {
+                        node = double_left_rotate(node);
+                    }
+                }
+            }
+        }
     }
     else if (this->mode == 2) // Colexicographic order
     {
@@ -144,11 +216,7 @@ ds_course::Node *ds_course::AVLTree::erase(Node *node, std::string word)
     std::string wordTemp = word;
     std::string nodeWordTemp = node->word;
 
-    if (this->mode == 1)
-    {
-        // TODO: Short lex
-    }
-    else if (this->mode == 2)
+    if (this->mode == 2)
     {
         wordTemp = reverse_string(wordTemp);
         nodeWordTemp = reverse_string(nodeWordTemp);
@@ -226,10 +294,7 @@ ds_course::Node *ds_course::AVLTree::get(ds_course::Node *node, std::string word
     std::string wordTemp = word;
     std::string nodeWordTemp = node->word;
 
-    if (this->mode == 1)
-    {
-    }
-    else if (this->mode == 2)
+    if (this->mode == 2)
     {
         wordTemp = reverse_string(wordTemp);
         nodeWordTemp = reverse_string(nodeWordTemp);
@@ -237,7 +302,6 @@ ds_course::Node *ds_course::AVLTree::get(ds_course::Node *node, std::string word
 
     if (wordTemp.compare(nodeWordTemp) == 0)
     {
-        // std::cout << " (" << node->word << "," << node->badnessValue << ")";
         return node;
     }
     else if (wordTemp < nodeWordTemp)
@@ -260,10 +324,7 @@ ds_course::Node *ds_course::AVLTree::locate(ds_course::Node *node, std::string w
     std::string wordTemp = word;
     std::string nodeWordTemp = node->word;
 
-    if (this->mode == 1)
-    {
-    }
-    else if (this->mode == 2)
+    if (this->mode == 2)
     {
         wordTemp = reverse_string(wordTemp);
         nodeWordTemp = reverse_string(nodeWordTemp);
@@ -297,11 +358,7 @@ void ds_course::AVLTree::dump(ds_course::Node *node, std::string start, std::str
     std::string endWordTemp = end;
     std::string nodeWordTemp = node->word;
 
-    if (this->mode == 1)
-    {
-        // TODO: Short lex
-    }
-    else if (this->mode == 2)
+    if (this->mode == 2)
     {
         startWordTemp = reverse_string(start);
         endWordTemp = reverse_string(end);
