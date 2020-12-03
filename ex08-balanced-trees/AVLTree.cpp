@@ -30,6 +30,27 @@ ds_course::AVLTree::~AVLTree()
 {
 }
 
+int ds_course::AVLTree::compare_words(std::string a, std::string b)
+{
+    if (this->mode == 0)
+    {
+        return compare_LEX(a, b);
+    }
+    else if (this->mode == 1)
+    {
+        return compare_SHORTLEX(a, b);
+    }
+    else if (this->mode == 2)
+    {
+        return compare_COLEX(a, b);
+    }
+    else
+    {
+        printf("Error in ordering\n");
+        return -1;
+    }
+}
+
 ds_course::Node *ds_course::AVLTree::insert(ds_course::Node *node, std::string word)
 {
     if (node == NULL)
@@ -38,217 +59,123 @@ ds_course::Node *ds_course::AVLTree::insert(ds_course::Node *node, std::string w
         return node;
     }
 
-    if (this->mode == 0) // Lexicographic order
+    int compareResult = compare_words(word, node->word);
+
+    if (compareResult == 0)
     {
-        if (word < node->word)
-        {
-            node->left = insert(node->left, word);
-
-            if (get_height(node->left) - get_height(node->right) == 2)
-            {
-                if (word < node->left->word)
-                {
-                    node = single_right_rotate(node);
-                }
-                else
-                {
-                    node = double_right_rotate(node);
-                }
-            }
-        }
-        else if (word.compare(node->word) == 0)
-        {
-            node->badnessValue++;
-            return node;
-        }
-        else if (word > node->word)
-        {
-            node->right = insert(node->right, word);
-
-            if (get_height(node->right) - get_height(node->left) == 2)
-            {
-                if (word > node->right->word)
-                {
-                    node = single_left_rotate(node);
-                }
-                else
-                {
-                    node = double_left_rotate(node);
-                }
-            }
-        }
+        node->left = insert(node->left, word);
     }
-    else if (this->mode == 1) // Shortlex order
+    else if (compareResult == 1)
     {
-        if (word.length() < node->word.length())
-        {
-            node->left = insert(node->left, word);
-
-            if (get_height(node->left) - get_height(node->right) == 2)
-            {
-                if (word < node->left->word)
-                {
-                    node = single_right_rotate(node);
-                }
-                else
-                {
-                    node = double_right_rotate(node);
-                }
-            }
-        }
-        else if (word.length() > node->word.length())
-        {
-            node->right = insert(node->right, word);
-
-            if (get_height(node->right) - get_height(node->left) == 2)
-            {
-                if (word > node->right->word)
-                {
-                    node = single_left_rotate(node);
-                }
-                else
-                {
-                    node = double_left_rotate(node);
-                }
-            }
-        }
-        else if (word.length() == node->word.length())
-        {
-            if (word < node->word)
-            {
-                node->left = insert(node->left, word);
-
-                if (get_height(node->left) - get_height(node->right) == 2)
-                {
-                    if (word < node->left->word)
-                    {
-                        node = single_right_rotate(node);
-                    }
-                    else
-                    {
-                        node = double_right_rotate(node);
-                    }
-                }
-            }
-            else if (word.compare(node->word) == 0)
-            {
-                node->badnessValue++;
-                return node;
-            }
-            else if (word > node->word)
-            {
-                node->right = insert(node->right, word);
-
-                if (get_height(node->right) - get_height(node->left) == 2)
-                {
-                    if (word > node->right->word)
-                    {
-                        node = single_left_rotate(node);
-                    }
-                    else
-                    {
-                        node = double_left_rotate(node);
-                    }
-                }
-            }
-        }
+        node->right = insert(node->right, word);
     }
-    else if (this->mode == 2) // Colexicographic order
+    else
     {
-        std::string wordTemp = reverse_string(word);
-        std::string nodeWordTemp = reverse_string(node->word);
-
-        if (wordTemp < nodeWordTemp)
-        {
-            node->left = insert(node->left, word);
-
-            if (get_height(node->left) - get_height(node->right) == 2)
-            {
-                std::string nodeLeftWordTemp = reverse_string(node->left->word);
-
-                if (wordTemp < nodeLeftWordTemp)
-                {
-                    node = single_right_rotate(node);
-                }
-                else
-                {
-                    node = double_right_rotate(node);
-                }
-            }
-        }
-        else if (wordTemp.compare(nodeWordTemp) == 0)
-        {
-            node->badnessValue++;
-            return node;
-        }
-        else if (wordTemp > nodeWordTemp)
-        {
-            node->right = insert(node->right, word);
-
-            if (get_height(node->right) - get_height(node->left) == 2)
-            {
-                std::string nodeRightWordTemp = reverse_string(node->right->word);
-
-                if (wordTemp > nodeRightWordTemp)
-                {
-                    node = single_left_rotate(node);
-                }
-                else
-                {
-                    node = double_left_rotate(node);
-                }
-            }
-        }
+        node->badnessValue++;
+        return node;
     }
 
     node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
+
+    int balance = get_balance(node);
+
+    if (balance > 1)
+    {
+        if (compare_words(word, node->left->word) == 0)
+        {
+            return single_right_rotate(node);
+        }
+    }
+
+    if (balance < -1)
+    {
+        if (compare_words(word, node->right->word) == 1)
+        {
+            return single_left_rotate(node);
+        }
+    }
+
+    if (balance > 1)
+    {
+        if (compare_words(word, node->left->word) == 1)
+        {
+            node->left = single_left_rotate(node->left);
+            return single_right_rotate(node);
+        }
+    }
+
+    if (balance < -1)
+    {
+        if (compare_words(word, node->right->word) == 0)
+        {
+            node->right = single_right_rotate(node->right);
+            return single_left_rotate(node);
+        }
+    }
+
     return node;
+}
+
+int ds_course::AVLTree::get_balance(Node *node)
+{
+    if (node == NULL)
+    {
+        return 0;
+    }
+
+    return get_height(node->left) - get_height(node->right);
 }
 
 ds_course::Node *ds_course::AVLTree::erase(Node *node, std::string word)
 {
+
     if (node == NULL)
     {
-        return NULL;
+        return node;
     }
 
-    ds_course::Node *temp;
-    std::string wordTemp = word;
-    std::string nodeWordTemp = node->word;
+    int compareResult = compare_words(word, node->word);
 
-    if (this->mode == 2)
-    {
-        wordTemp = reverse_string(wordTemp);
-        nodeWordTemp = reverse_string(nodeWordTemp);
-    }
-
-    if (wordTemp < nodeWordTemp)
+    if (compareResult == 0)
     {
         node->left = erase(node->left, word);
     }
-    else if (wordTemp > nodeWordTemp)
+    else if (compareResult == 1)
     {
         node->right = erase(node->right, word);
     }
-    else if (node->left && node->right)
-    {
-        temp = find_min(node->right);
-        node->word = temp->word;
-        node->badnessValue = temp->badnessValue;
-        node->right = erase(node->right, node->word);
-    }
     else
     {
-        temp = node;
-        if (node->left == NULL)
+        if ((node->left == NULL) || (node->right == NULL))
         {
-            node = node->right;
+            ds_course::Node *temp = NULL;
+
+            if (node->left != NULL)
+            {
+                temp = node->left;
+                *node = *temp;
+            }
+            else if (node->right != NULL)
+            {
+                temp = node->right;
+                *node = *temp;
+            }
+            else
+            {
+                temp = node;
+                node = NULL;
+            }
+            free(temp);
         }
-        else if (node->right == NULL)
+        else
         {
-            node = node->left;
+            ds_course::Node *temp = find_min(node->right);
+
+            node->word = temp->word;
+            node->badnessValue = temp->badnessValue;
+
+            node->right = erase(node->right, temp->word);
         }
-        delete temp;
     }
 
     if (node == NULL)
@@ -258,27 +185,28 @@ ds_course::Node *ds_course::AVLTree::erase(Node *node, std::string word)
 
     node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
 
-    if (get_height(node->left) - get_height(node->right) == 2)
+    int balance = get_balance(node);
+
+    if (balance > 1 && get_balance(node->left) >= 0)
     {
-        if (get_height(node->left->left) - get_height(node->left->right) == 1)
-        {
-            return single_left_rotate(node);
-        }
-        else
-        {
-            return double_left_rotate(node);
-        }
+        return single_right_rotate(node);
     }
-    else if (get_height(node->right) - get_height(node->left) == 2)
+
+    if (balance > 1 && get_balance(node->left) < 0)
     {
-        if (get_height(node->right->right) - get_height(node->right->left) == 1)
-        {
-            return single_right_rotate(node);
-        }
-        else
-        {
-            return double_right_rotate(node);
-        }
+        node->left = single_left_rotate(node->left);
+        return single_right_rotate(node);
+    }
+
+    if (balance < -1 && get_balance(node->right) <= 0)
+    {
+        return single_left_rotate(node);
+    }
+
+    if (balance < -1 && get_balance(node->right) > 0)
+    {
+        node->right = single_right_rotate(node->right);
+        return single_left_rotate(node);
     }
 
     return node;
@@ -291,22 +219,15 @@ ds_course::Node *ds_course::AVLTree::get(ds_course::Node *node, std::string word
         return NULL;
     }
 
-    std::string wordTemp = word;
-    std::string nodeWordTemp = node->word;
+    int compareResult = compare_words(word, node->word);
 
-    if (this->mode == 2)
-    {
-        wordTemp = reverse_string(wordTemp);
-        nodeWordTemp = reverse_string(nodeWordTemp);
-    }
-
-    if (wordTemp.compare(nodeWordTemp) == 0)
-    {
-        return node;
-    }
-    else if (wordTemp < nodeWordTemp)
+    if (compareResult == 0)
     {
         return get(node->left, word);
+    }
+    else if (compareResult == 2)
+    {
+        return node;
     }
     else
     {
@@ -321,21 +242,14 @@ ds_course::Node *ds_course::AVLTree::locate(ds_course::Node *node, std::string w
         return NULL;
     }
 
-    std::string wordTemp = word;
-    std::string nodeWordTemp = node->word;
+    int compareResult = compare_words(word, node->word);
 
-    if (this->mode == 2)
-    {
-        wordTemp = reverse_string(wordTemp);
-        nodeWordTemp = reverse_string(nodeWordTemp);
-    }
-
-    if (wordTemp.compare(nodeWordTemp) == 0)
+    if (compareResult == 2)
     {
         std::cout << " " << path;
         return node;
     }
-    else if (wordTemp < nodeWordTemp)
+    else if (compareResult == 0)
     {
         path.push_back('L');
         return locate(node->left, word, path);
@@ -354,17 +268,6 @@ void ds_course::AVLTree::dump(ds_course::Node *node, std::string start, std::str
         return;
     }
 
-    std::string startWordTemp = start;
-    std::string endWordTemp = end;
-    std::string nodeWordTemp = node->word;
-
-    if (this->mode == 2)
-    {
-        startWordTemp = reverse_string(start);
-        endWordTemp = reverse_string(end);
-        nodeWordTemp = reverse_string(node->word);
-    }
-
     dump(node->left, start, end);
 
     if (start.compare("_") == 0 && end.compare("_") == 0)
@@ -373,21 +276,24 @@ void ds_course::AVLTree::dump(ds_course::Node *node, std::string start, std::str
     }
     else if (start.compare("_") == 0)
     {
-        if (startWordTemp < nodeWordTemp)
+        if (compare_words(end, node->word) == 1 || end == node->word)
         {
             std::cout << " (" << node->word << "," << node->badnessValue << ")";
         }
     }
     else if (end.compare("_") == 0)
     {
-        if (endWordTemp > nodeWordTemp)
+        if (compare_words(start, node->word) == 0 || start == node->word)
         {
             std::cout << " (" << node->word << "," << node->badnessValue << ")";
         }
     }
     else
     {
-        if (startWordTemp < nodeWordTemp && endWordTemp > nodeWordTemp)
+        int compareStartResult = compare_words(start, node->word);
+        int compareEndResult = compare_words(end, node->word);
+
+        if (((compareStartResult == 0) || (start == node->word)) && ((compareEndResult == 1) || (end == node->word)))
         {
             std::cout << " (" << node->word << "," << node->badnessValue << ")";
         }
@@ -446,46 +352,193 @@ ds_course::Node *ds_course::AVLTree::find_max(ds_course::Node *node)
     }
 }
 
-ds_course::Node *ds_course::AVLTree::single_right_rotate(ds_course::Node *&node)
+int ds_course::AVLTree::compare_lower_case(char a, char b)
 {
-    if (node->left == NULL)
+    bool aIsUpper = false;
+    bool bIsUpper = false;
+
+    if (a < 91 && a > 64)
     {
-        return node;
+        aIsUpper = true;
+        a = a + 32;
     }
 
-    ds_course::Node *u = node->left;
-    node->left = u->right;
-    u->right = node;
-    node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
-    u->height = std::max(get_height(u->left), node->height) + 1;
-
-    return u;
-}
-
-ds_course::Node *ds_course::AVLTree::single_left_rotate(ds_course::Node *&node)
-{
-    if (node->right == NULL)
+    if (b < 91 && b > 64)
     {
-        return node;
+        bIsUpper = true;
+        b = b + 32;
     }
 
-    ds_course::Node *u = node->right;
-    node->right = u->left;
-    u->left = node;
+    if (a < b)
+    {
+        return -1;
+    }
+
+    if (a > b)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int ds_course::AVLTree::compare_upper_case(char a, char b)
+{
+    bool aIsUpper = false;
+    bool bIsUpper = false;
+
+    if (a < 91 && a > 64)
+    {
+        aIsUpper = true;
+        a = a + 32;
+    }
+
+    if (b < 91 && b > 64)
+    {
+        bIsUpper = true;
+        b = b + 32;
+    }
+
+    if (aIsUpper == true && bIsUpper == false)
+    {
+        return -1;
+    }
+
+    if (aIsUpper == false && bIsUpper == true)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int ds_course::AVLTree::compare_LEX(std::string a, std::string b)
+{
+    int lenA = a.length();
+    int lenB = b.length();
+    int minLen = 0, i = 0, j = 0, resultLower = 0, resultUpper = 0;
+
+    if (lenA < lenB || lenA == lenB)
+    {
+        minLen = lenA;
+    }
+    else
+    {
+        minLen = lenB;
+    }
+
+    while (i < minLen)
+    {
+        resultLower = ds_course::AVLTree::compare_lower_case(a[i], b[i]);
+        if (resultLower == -1)
+        {
+            return 0;
+        }
+
+        if (resultLower == 1)
+        {
+            return 1;
+        }
+
+        if (i == minLen - 1 && resultLower == 0)
+        {
+            if (lenA < lenB)
+            {
+                return 0;
+            }
+
+            if (lenA > lenB)
+            {
+                return 1;
+            }
+
+            j = 0;
+            while (j < minLen)
+            {
+                resultUpper = ds_course::AVLTree::compare_upper_case(a[j], b[j]);
+                if (resultUpper == -1)
+                {
+                    return 0;
+                }
+
+                if (resultUpper == 1)
+                {
+                    return 1;
+                }
+
+                if (j == minLen - 1 && resultUpper == 0)
+                {
+                    return 2;
+                }
+                j++;
+            }
+        }
+        i++;
+    }
+    return 2;
+}
+
+int ds_course::AVLTree::compare_SHORTLEX(std::string a, std::string b)
+{
+    if (a == b)
+        return 2;
+
+    if (a.length() < b.length())
+        return 0;
+
+    if ((a.length() == b.length()) && ds_course::AVLTree::compare_LEX(a, b) == 0)
+        return 0;
+
+    return 1;
+}
+
+int ds_course::AVLTree::compare_COLEX(std::string a, std::string b)
+{
+    a = ds_course::AVLTree::reverse_string(a);
+    b = ds_course::AVLTree::reverse_string(b);
+
+    if (ds_course::AVLTree::compare_LEX(a, b) == 0)
+    {
+        return 0;
+    }
+    else if (ds_course::AVLTree::compare_LEX(a, b) == 1)
+    {
+        return 1;
+    }
+    else
+    {
+        return 2;
+    }
+}
+
+ds_course::Node *ds_course::AVLTree::single_right_rotate(ds_course::Node *node)
+{
+    ds_course::Node *x = node->left;
+    ds_course::Node *T2 = x->right;
+
+    x->right = node;
+    node->left = T2;
+
     node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
-    u->height = std::max(get_height(node->right), node->height) + 1;
+    x->height = std::max(get_height(x->left), get_height(x->right)) + 1;
 
-    return u;
+    return x;
 }
 
-ds_course::Node *ds_course::AVLTree::double_left_rotate(ds_course::Node *&node)
+ds_course::Node *ds_course::AVLTree::single_left_rotate(ds_course::Node *node)
 {
-    node->right = single_right_rotate(node->right);
-    return single_left_rotate(node);
-}
+    ds_course::Node *y = node->right;
+    ds_course::Node *T2 = y->left;
 
-ds_course::Node *ds_course::AVLTree::double_right_rotate(ds_course::Node *&node)
-{
-    node->left = single_left_rotate(node->left);
-    return single_right_rotate(node);
+    y->left = node;
+    node->right = T2;
+
+    node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
+    y->height = std::max(get_height(y->left), get_height(y->right)) + 1;
+
+    return y;
 }

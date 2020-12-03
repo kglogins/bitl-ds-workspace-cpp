@@ -1,0 +1,7 @@
+22 (eaahb,1) (jhabc,1) (eggbc,1) (fcigc,1)
+23 (eddda,1) (hfiea,1) (jjiea,1) (febbb,1) (jhecb,1) (jcjcb,1) (gcegb,1) (eaahb,1)
+24 (eddda,1) (hfiea,1) (jjiea,1) (febbb,1) (jhecb,1) (jcjcb,1) (gcegb,1)
+25 (eddda,1)
+26
+27 (fbajj,1)
+28

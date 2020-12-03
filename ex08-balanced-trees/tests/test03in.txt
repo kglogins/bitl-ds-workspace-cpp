@@ -1,0 +1,29 @@
+COLEX
+I iccdd
+I eggbc
+I febbb
+I 6ahde
+I jhabc
+I fcigc
+I jcjcb
+I jhecb
+I jbgff
+I giaej
+I hfiea
+I hdbbd
+I eddda
+I jjiea
+I gcegb
+I efdeh
+I ejcij
+I bjdji
+I fbajj
+I eaahb
+D eaahb fcigc
+D _ eaahb
+D _ daahb
+D _ eddda
+D _ dddda
+D fbajj _
+D gbajj _
+F

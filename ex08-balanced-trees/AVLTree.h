@@ -21,13 +21,19 @@ namespace ds_course
         void dump(Node *node, std::string start, std::string end);
         std::string reverse_string(std::string str);
         int get_height(Node *node);
+        int get_balance(Node *node);
         Node *find_min(Node *node);
         Node *find_max(Node *node);
 
-        Node *single_right_rotate(Node *&node);
-        Node *single_left_rotate(Node *&node);
-        Node *double_left_rotate(Node *&node);
-        Node *double_right_rotate(Node *&node);
+        int compare_lower_case(char a, char b);
+        int compare_upper_case(char a, char b);
+        int compare_LEX(std::string a, std::string b);
+        int compare_SHORTLEX(std::string a, std::string b);
+        int compare_COLEX(std::string a, std::string b);
+        int compare_words(std::string a, std::string b);
+
+        Node *single_right_rotate(Node *node);
+        Node *single_left_rotate(Node *node);
     };
 
     struct Node
