@@ -24,6 +24,7 @@ namespace ds_course
         int get_balance(Node *node);
         Node *find_min(Node *node);
         Node *find_max(Node *node);
+        int max(int left, int right);
 
         int compare_lower_case(char a, char b);
         int compare_upper_case(char a, char b);

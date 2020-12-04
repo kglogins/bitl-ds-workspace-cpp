@@ -1,0 +1,9 @@
+3 (abats,2)
+4 (abi,1)
+6 (abinieki,0)
+7 *LR
+8 *
+9 N
+10 (abatija,1) (abate,1) (abi,1) (abats,2) (abonements,1)
+11 (abate,1) (abi,1) (abats,2)
+12

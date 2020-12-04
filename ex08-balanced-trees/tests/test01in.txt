@@ -6,7 +6,7 @@ E abinieki abpus abra
 G abinieki
 L abi
 L abats
-L abi
+L abinieki
 D _ _
 D ATE zzzzzats
 D zz aa

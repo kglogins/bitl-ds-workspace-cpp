@@ -51,6 +51,13 @@ int ds_course::AVLTree::compare_words(std::string a, std::string b)
     }
 }
 
+int ds_course::AVLTree::max(int left, int right)
+{
+    if (right < left)
+        return left;
+    return right;
+}
+
 ds_course::Node *ds_course::AVLTree::insert(ds_course::Node *node, std::string word)
 {
     if (node == NULL)
@@ -75,7 +82,7 @@ ds_course::Node *ds_course::AVLTree::insert(ds_course::Node *node, std::string w
         return node;
     }
 
-    node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
+    node->height = ds_course::AVLTree::max(get_height(node->left), get_height(node->right)) + 1;
 
     int balance = get_balance(node);
 
@@ -128,7 +135,6 @@ int ds_course::AVLTree::get_balance(Node *node)
 
 ds_course::Node *ds_course::AVLTree::erase(Node *node, std::string word)
 {
-
     if (node == NULL)
     {
         return node;
@@ -317,23 +323,31 @@ std::string ds_course::AVLTree::reverse_string(std::string str)
 
 int ds_course::AVLTree::get_height(ds_course::Node *node)
 {
-    return (node == NULL ? -1 : node->height);
+    return (node == NULL ? 0 : node->height);
 }
 
 ds_course::Node *ds_course::AVLTree::find_min(ds_course::Node *node)
 {
-    if (node == NULL)
+    ds_course::Node *temp = node;
+
+    while (temp->left != NULL)
     {
-        return NULL;
+        temp = temp->left;
     }
-    else if (node->left == NULL)
-    {
-        return node;
-    }
-    else
-    {
-        return find_min(node->left);
-    }
+
+    return temp;
+    // if (node == NULL)
+    // {
+    //     return NULL;
+    // }
+    // else if (node->left == NULL)
+    // {
+    //     return node;
+    // }
+    // else
+    // {
+    //     return find_min(node->left);
+    // }
 }
 
 ds_course::Node *ds_course::AVLTree::find_max(ds_course::Node *node)
